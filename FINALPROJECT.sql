@@ -281,3 +281,47 @@ MMT.MovieID = TDT.MovieID, (
 where MMT.MovieID in ('MO3001') 
 --================================================================  
  
+
+
+--EXPERIMENTAL CODES 
+--10
+--=======================================================
+Create View [Food Sales] as
+select 
+FoodName, 
+SUM(FoodQuantity) as 'Total Quantity Sold' 
+AVG(FoodPrice) as 'Average Food Price' 
+from MsFood MF join 
+TransactionDetailFood TDF on 
+MF.FoodID = TDF.FoodID join 
+TransactionHeader TH on 
+TDF.TransactionID = TH.TransactionID
+where FoodCategory in ('Sandwich') and 
+Year(TransactionDate) = Year(Getdate()) 
+Group by FoodName;
+
+select * from [Food Sales]
+--======================================================= 
+
+--9 
+--======================================================= 
+Create View [TotalPurchase] as 
+select 
+Stuff(Varchar, Charindex(' ', StaffName) - 1, len(StaffName), 'Staff') as 'Staff', 
+MovieName, 
+MovieRating, 
+AVG(TicketQuantity) as 'Average Ticket Bought', 
+SUM(TicketQuantity) as 'Total Ticket Bought'
+from MsStaff MS join 
+TransactionHeader TH on 
+MS.StaffID = TH.StaffID join 
+TransactionDetailTicket TDT on 
+TH.TransactionID = TDT.TransactionID join 
+MsMovie MM on 
+MM.MovieID = TDT.MovieID 
+where MovieRating = '5'
+GroupBy MovieName, MovieRating 
+having SUM(TicketQuantity) > AVG(TicketQuantity);
+
+Select * from [TotalPurchase]
+--======================================================= 
