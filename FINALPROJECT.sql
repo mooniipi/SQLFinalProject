@@ -3,6 +3,8 @@ GO
 USE CineMoFie
 GO
 
+
+
 CREATE TABLE MsStaff (
 StaffID CHAR(5) PRIMARY KEY CHECK(StaffID LIKE('ST[0-9][0-9][0-9]')) NOT NULL,
 StaffName VARCHAR(50) NOT NULL,
@@ -88,28 +90,28 @@ TransactionID CHAR(5) FOREIGN KEY REFERENCES TransactionHeader(TransactionID) NO
 --================================================================================================================================ 
 --Data Insert 
 INSERT INTO MsStaff VALUES 
-('ST108', 'Lance Arifin', '10-08-2005', 'Jl. Sunter 5', 'Male'),
-('ST012', 'Vincent Febryan', '06-02-2005', 'Jl. Mangga Besar 1', 'Male'),
-('ST111', 'Alvin Febryan', '09-02-2005', 'Jl. Pluit Raya 9', 'Male'),
-('ST121', 'Leonardo Dharmasetiawan', '31-12-2004', 'Jl. Jatiwaringin 10', 'Male'),
-('ST028', 'Dave Reynara', '15-08-2005', 'Jl. Tomang 16', 'Male'),
-('ST981', 'Angel Richard', '27-07-2002', 'Jl. Kemanggisan 1', 'Female'),
-('ST999', 'Angel Gunawan', '01-09-2005', 'Jl. Batu Tulis 12', 'Female'),
-('ST888', 'Marshanda Salim', '30-08-2005', 'Jl. Sunter Mas 10', 'Female'),
-('ST912', 'Diogenes Fam', '21-07-2005', 'Jl. Pademangan 5', 'Male'),
-('ST444', 'Bryan Fandy', '13-04-2005', 'Jl. Mangga Dua 10', 'Male')
+('ST108', 'Lance Arifin', '2005-08-10', 'Jl. Sunter 5', 'Male'),
+('ST012', 'Vincent Febryan', '2005-02-06', 'Jl. Mangga Besar 1', 'Male'),
+('ST111', 'Alvin Febryan', '2005-02-09', 'Jl. Pluit Raya 9', 'Male'),
+('ST121', 'Leonardo Dharmasetiawan', '2004-12-31', 'Jl. Jatiwaringin 10', 'Male'),
+('ST028', 'Dave Reynara', '2005-08-15', 'Jl. Tomang 16', 'Male'),
+('ST981', 'Angel Richard', '2002-07-27', 'Jl. Kemanggisan 1', 'Female'),
+('ST999', 'Angel Gunawan', '2005-09-22', 'Jl. Batu Tulis 12', 'Female'),
+('ST888', 'Marshanda Salim', '2005-08-30', 'Jl. Sunter Mas 10', 'Female'),
+('ST912', 'Diogenes Fam', '2005-07-15', 'Jl. Pademangan 5', 'Male'),
+('ST444', 'Bryan Fandy', '2005-04-13', 'Jl. Mangga Dua 10', 'Male')
 
 INSERT INTO MsCustomer VALUES
-('CU901', 'Marvin Chandiary', '23-12-2005', 'Male'),
-('CU222', 'Putu Pramajaya', '28-6-2005', 'Male'),
-('CU911', 'Edmund Setiady', '27-4-2005', 'Male'),
-('CU478', 'Christopher Mulyono', '24-10-2005', 'Male'),
-('CU652', 'Alexander Edward', '19-6-2005', 'Male'),
-('CU823', 'Vincent Hansel', '29-9-2005', 'Male'),
-('CU764', 'Jeanette Gunawan', '28-3-2005', 'Female'),
-('CU827', 'Thomas Jevon', '28-12-2005', 'Male'),
-('CU008', 'Daniel Budiman', '6-10-2005', 'Male'),
-('CU987', 'Celine Tan', '16-3-2005', 'Female')
+('CU901', 'Marvin Chandiary', '2005-12-23', 'Male'),
+('CU222', 'Putu Pramajaya', '2005-06-28', 'Male'),
+('CU911', 'Edmund Setiady', '2005-04-27', 'Male'),
+('CU478', 'Christopher Mulyono', '2005-10-24', 'Male'),
+('CU652', 'Alexander Edward', '2005-06-19', 'Male'),
+('CU823', 'Vincent Hansel', '2005-09-29', 'Male'),
+('CU764', 'Jeanette Gunawan', '2005-03-28', 'Female'),
+('CU827', 'Thomas Jevon', '2005-12-28', 'Male'),
+('CU008', 'Daniel Budiman', '2005-10-06', 'Male'),
+('CU987', 'Celine Tan', '2005-03-16', 'Female')
 
 INSERT INTO MsFood VALUES
 ('FO012', 'Caramel Popcorn', 'Fried', '83868'),
@@ -124,14 +126,14 @@ INSERT INTO MsFood VALUES
 ('FO182', 'Club Sandwich', 'Sandwich', '24855')
 
 INSERT INTO MsDrink VALUES
-('DR217', 'Cola-cola', 'Soda', '21553'),
-('DR019', 'Sprite', 'Soda', '11807'),
-('DR981', 'Fanta', 'Soda', '84387'),
+('DR217', 'Cola-cola', 'Soft Drink', '21553'),
+('DR019', 'Sprite', 'Soft Drink', '11807'),
+('DR981', 'Fanta', 'Soft Drink', '84387'),
 ('DR934', 'Banana Milk', 'Milk', '80476'),
 ('DR012', 'Turkish Coffee', 'Coffee', '88929'),
 ('DR103', 'Tobruk Coffee', 'Coffee', '65814'),
 ('DR021', 'Jasmine Tea', 'Herbal', '40542'),
-('DR812', 'Charmonile Tea', 'Soda', '83270'),
+('DR812', 'Charmonile Tea', 'Soft Drink', '83270'),
 ('DR923', 'Oolong Tea', 'Herbal', '65091'),
 ('DR013', 'English Breakfast', 'Herbal', '94055')
 
@@ -157,7 +159,7 @@ INSERT INTO MsSupplier VALUES
 ('SU541', 'PT. Borneo', 'Jl. Kurnia 1'),
 ('SU821', 'PT. Teknologi', 'Jl. Jeruk 10'),
 ('SU931', 'PT. Yogyakarta', 'Jl. Jogja 12'),
-('SU821', 'PT. 51', 'Jl. Sudirman 21')
+('SU825', 'PT. 51', 'Jl. Sudirman 21')
 
 --================================================================================================================================ 
 
