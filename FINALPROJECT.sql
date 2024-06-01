@@ -2,7 +2,20 @@ CREATE DATABASE CineMoFie
 GO
 USE CineMoFie
 GO
-
+--DROP STAGING AREA
+DROP DATABASE CineMoFie 
+DROP TABLE MsStaff 
+DROP TABLE MsCustomer
+DROP TABLE MsFood 
+DROP TABLE MsDrink 
+DROP TABLE MsMovie 
+DROP TABLE MsSupplier 
+DROP TABLE TransactionHeader 
+DROP TABLE TransactionDetailFood  
+DROP TABLE TransactionDetailDrink 
+DROP TABLE TransactionDetailTicket
+DROP TABLE MsPurchase
+------------------------------------------------
 
 
 CREATE TABLE MsStaff (
@@ -57,8 +70,8 @@ SupplierAddress VARCHAR(50) NOT NULL
 CREATE TABLE TransactionHeader (
 TransactionID CHAR(5) PRIMARY KEY CHECK (TransactionID LIKE('TR[0-9][0-9][0-9]')) NOT NULL,
 TransactionDate VARCHAR(50) NOT NULL,
-StaffID CHAR(5) FOREIGN KEY REFERENCES MsStaff(StaffID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-CustomerID CHAR(5) FOREIGN KEY REFERENCES MsCustomer(CustomerID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+StaffID CHAR(5) FOREIGN KEY REFERENCES MsStaff(StaffID) NOT NULL,
+CustomerID CHAR(5) FOREIGN KEY REFERENCES MsCustomer(CustomerID) NOT NULL,
 )
 
 CREATE TABLE TransactionDetailFood (
@@ -75,7 +88,7 @@ DrinkQuantity INT NOT NULL
 
 CREATE TABLE TransactionDetailTicket (
 TransactionID CHAR(5) FOREIGN KEY REFERENCES TransactionHeader(TransactionID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-MovieID CHAR(5) FOREIGN KEY REFERENCES MsMovie(MovieID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+MovieID CHAR(5) FOREIGN KEY REFERENCES MsMovie(MovieID) NOT NULL,
 TicketQuantity INT NOT NULL
 )
 
@@ -84,8 +97,16 @@ PurchaseID CHAR(5) PRIMARY KEY CHECK(PurchaseID LIKE('PU[0-9][0-9][0-9]')) NOT N
 StaffID CHAR(5) FOREIGN KEY REFERENCES MsStaff(StaffID) NOT NULL,
 SupplierID CHAR(5) FOREIGN KEY REFERENCES MsSupplier(SupplierID) NOT NULL,
 PurchaseDate VARCHAR(50) NOT NULL,
-TransactionID CHAR(5) FOREIGN KEY REFERENCES TransactionHeader(TransactionID) NOT NULL
+) 
+
+CREATE TABLE PurchaseDetailFood( 
+
+) 
+
+CREATE TABLE PurchaseDetailDrink(
+
 )
+
 --================================================================================================================================
 --================================================================================================================================ 
 --Data Insert 
@@ -160,28 +181,206 @@ INSERT INTO MsSupplier VALUES
 ('SU821', 'PT. Teknologi', 'Jl. Jeruk 10'),
 ('SU931', 'PT. Yogyakarta', 'Jl. Jogja 12'),
 ('SU825', 'PT. 51', 'Jl. Sudirman 21')
+--problem
+INSERT INTO TransactionHeader(TransactionID, StaffID, CustomerID, TransactionDate)  
+VALUES
+('TR001',	'ST108',	'CU901',	'2019-1-5'),
+('TR002',	'ST108',	'CU222',	'2019-8-8'),
+('TR003',	'ST012',	'CU222',	'2019-12-25'),
+('TR004',	'ST121',	'CU911',	'2019-6-21'),
+('TR005',	'ST111',	'CU478',	'2019-8-24'),
+('TR006',	'ST111',	'CU911',	'2019-1-4'),
+('TR007',	'ST028',	'CU652',	'2019-9-13'),
+('TR008',	'ST981',	'CU823',	'2019-9-16'),
+('TR009',	'ST981',	'CU764',	'2019-4-16'),
+('TR010',	'ST912',	'CU764',	'2019-1-17'),
+('TR011',	'ST444',	'CU827',	'2019-6-9'),
+('TR012',	'ST444',	'CU008',	'2019-12-29'),
+('TR013',	'ST999',	'CU987',	'2019-2-9'),
+('TR014',	'ST888',	'CU008',	'2019-9-3'),
+('TR015',	'ST888',	'CU827',	'2019-7-24'),
+('TR016',	'ST111',	'CU478',	'2019-10-9'),
+('TR017',	'ST028',	'CU911',	'2019-8-2'),
+('TR018',	'ST981',	'CU652',	'2019-12-2'),
+('TR019',	'ST981',	'CU823',	'2019-6-19'),
+('TR020',	'ST912',	'CU764',	'2019-10-9'),
+('TR021',	'ST444',	'CU764',	'2019-11-1'),
+('TR022',	'ST444',	'CU827',	'2019-12-23'),
+('TR023',	'ST999',	'CU008',	'2019-6-22'),
+('TR024',	'ST888',	'CU987',	'2019-10-23'),
+('TR025',	'ST108',	'CU008',	'2019-4-21')
 
+INSERT INTO TransactionDetailFood VALUES
+('TR001',	'FO012',	'2'),
+('TR001',	'FO213',	'2'),
+('TR001',	'FO234',	'3'),
+('TR002',	'FO912',	'5'),
+('TR003',	'FO221',	'2'),
+('TR003',	'FO094',	'4'),
+('TR004',	'FO921',	'1'),
+('TR005',	'FO920',	'3'),
+('TR005',	'FO100',	'2'),
+('TR006',	'FO182',	'1'),
+('TR007',	'FO094',	'1'),
+('TR008',	'FO012',	'2'),
+('TR009',	'FO100',	'4'),
+('TR010',	'FO234',	'2'),
+('TR010',	'FO182',	'3'),
+('TR010',	'FO921',	'1'),
+('TR010',	'FO012',	'1'),
+('TR011',	'FO221',	'1'),
+('TR012',	'FO920',	'1'),
+('TR013',	'FO912',	'2'),
+('TR014',	'FO213',	'2'),
+('TR015',   'FO094',	'2'),
+('TR015',	'FO100',	'1'),
+('TR015',	'FO921',	'1'),
+('TR015',	'FO234',	'1'),
+('TR016',	'FO100',	'2'),
+('TR016',	'FO234',	'2'),
+('TR017',	'FO182',	'3'),
+('TR018',	'FO921',	'5'),
+('TR018',	'FO012',	'2'),
+('TR018',	'FO221',	'4'),
+('TR019',	'FO920',	'1'),
+('TR020',	'FO912',	'3'),
+('TR021',	'FO213',	'2'),
+('TR021',	'FO094',	'1'),
+('TR022',	'FO100',	'1'),
+('TR022',	'FO921',	'2'),
+('TR022',	'FO234',	'4'),
+('TR022',	'FO012',	'1'),
+('TR023',	'FO213',	'1'),
+('TR023',	'FO234',	'2'),
+('TR024',	'FO912',	'2'),
+('TR025',	'FO221',	'2'),
+('TR025',	'FO094',	'1') 
+
+INSERT INTO TransactionDetailDrink VALUES
+('TR001', 'DR217', '3'),
+('TR002', 'DR019', '1'),
+('TR002', 'DR021', '2'),
+('TR002', 'DR812', '3'),
+('TR003', 'DR981', '2'),
+('TR003', 'DR021', '2'),
+('TR004', 'DR934', '2'),
+('TR004', 'DR923', '3'),
+('TR004', 'DR013', '4'),
+('TR004', 'DR012', '1'),
+('TR004', 'DR981', '3'),
+('TR005', 'DR012', '4'),
+('TR006', 'DR103', '2'),
+('TR007', 'DR021', '2'),
+('TR008', 'DR812', '3'),
+('TR009', 'DR923', '5'),
+('TR009', 'DR981', '2'),
+('TR009', 'DR012', '2'),
+('TR010', 'DR013', '3'),
+('TR011', 'DR012', '2'),
+('TR012', 'DR103', '1'),
+('TR013', 'DR217', '1'),
+('TR014', 'DR019', '4'),
+('TR015', 'DR981', '2'),
+('TR015', 'DR103', '1'),
+('TR016', 'DR934', '2'),
+('TR017', 'DR923', '3'),
+('TR017', 'DR013', '4'),
+('TR017', 'DR012', '1'),
+('TR018', 'DR981', '3'),
+('TR018', 'DR012', '4'),
+('TR019', 'DR103', '2'),
+('TR019', 'DR021', '2'),
+('TR020', 'DR812', '3'),
+('TR021', 'DR923', '5'),
+('TR021', 'DR981', '2'),
+('TR022', 'DR012', '2'),
+('TR022', 'DR013', '3'),
+('TR022', 'DR012', '2'),
+('TR023', 'DR103', '1'),
+('TR024', 'DR217', '1'),
+('TR024', 'DR019', '1'),
+('TR025', 'DR217', '1'),
+('TR025', 'DR019', '4')
+
+INSERT INTO TransactionDetailTicket VALUES
+('TR001', 'MO200', '5'),
+('TR001', 'MO812', '2'),
+('TR003', 'MO974', '3'),
+('TR003', 'MO555', '4'),
+('TR003', 'MO984', '2'),
+('TR004', 'MO821', '2'),
+('TR005', 'MO721', '4'),
+('TR005', 'MO721', '1'),
+('TR005', 'MO941', '1'),
+('TR005', 'MO444', '3'),
+('TR006', 'MO941', '5'),
+('TR007', 'MO874', '1'),
+('TR007', 'MO200', '4'),
+('TR007', 'MO444', '3'),
+('TR008', 'MO444', '4'),
+('TR009', 'MO555', '4'),
+('TR010', 'MO984', '4'),
+('TR010', 'MO941', '2'),
+('TR010', 'MO721', '2'),
+('TR010', 'MO555', '1'),
+('TR011', 'MO721', '2'),
+('TR011', 'MO941', '2'),
+('TR013', 'MO444', '3'),
+('TR014', 'MO555', '5'),
+('TR015', 'MO200', '2'),
+('TR016', 'MO974', '4'),
+('TR016', 'MO555', '1'),
+('TR016', 'MO984', '1'),
+('TR017', 'MO831', '3'),
+('TR017', 'MO721', '5'),
+('TR018', 'MO721', '1'),
+('TR018', 'MO941', '4'),
+('TR019', 'MO444', '3'),
+('TR019', 'MO941', '4'),
+('TR019', 'MO874', '4'),
+('TR020', 'MO200', '4'),
+('TR021', 'MO444', '2'),
+('TR022', 'MO444', '2'),
+('TR022', 'MO555', '1'),
+('TR023', 'MO984', '2'),
+('TR024', 'MO941', '5'),
+('TR024', 'MO721', '1'),
+('TR025', 'MO555', '4'),
+('TR025', 'MO721', '3')
+
+INSERT INTO MsPurchase VALUES 
+('PU201', 'ST108', 'SU091', '2018-12-1'), 
+('PU921', 'ST012', 'SU921', '2018-12-3'), 
+('PU312', 'ST012', 'SU871', '2018-12-10'), 
+('PU888', 'ST108', 'SU827', '2019-4-1'), 
+('PU001', 'ST108', 'SU833', '2019-4-1'), 
+('PU845', 'ST108', 'SU718', '2019-5-15'), 
+('PU827', 'ST111', 'SU825', '2019-6-1'), 
+('PU821', 'ST111', 'SU541', '2019-7-9'), 
+('PU999', 'ST012', 'SU931', '2019-9-10'), 
+('PU838', 'ST108', 'SU931', '2019-10-9')
 --================================================================================================================================ 
 
 
 --Jawaban Dari Soal 1 - 10 
 
---1 
+--1 (BERHASIL)
 --================================================================
 select  
-upper(StaffName) as 'Staffs', 
+upper(MS.StaffName) as 'Staffs', 
 PurchaseDate, 
-Count(TDF.TransactionID) as 'Total Food Purchase'
+Count(TH.TransactionID) as 'Total Food Purchase'
 from MsStaff MS join 
 MsPurchase MP on 
 MS.StaffID = MS.StaffID join
-TransactionDetailFood TDF on 
-MP.TransactionID = TDF.TransactionID 
+TransactionHeader TH on 
+MS.StaffID = TH.StaffID 
 Where StaffGender Like ('Male') And Year(PurchaseDate) = 2019
 group by PurchaseDate, StaffName
+order by PurchaseDate DESC
 --================================================================
 
---2 
+--2 (Masih ada problem)
 --================================================================ 
 Select 
 PurchaseID, 
@@ -190,13 +389,13 @@ Sum(DrinkQuantity) As 'Total Drink Purchase'
 from MsPurchase MP join 
 MsSupplier MSUP on
 MP.SupplierID = MSUP.SupplierID join 
-TransactionDetailDrink TDD on
+TransactionHeader T on
 MP.TransactionID = TDD.TransactionID 
 group by PurchaseID, SupplierName
 Having SUM(DrinkQuantity) < 5 and PurchaseID % 2 = 0 
 --================================================================
 
---3 
+--3 (BERHASIL)
 --================================================================ 
 Select 
 Convert(varchar, TransactionDate, 107) as 'Transaction Date', 
@@ -216,7 +415,7 @@ Year(TransactionDate) < 2023
 group by FoodPrice, DrinkPrice, TransactionDate
 --================================================================  
 
---4 
+--4 (Berhasil)
 --================================================================ 
 Select 
 left(StaffName, Charindex(' ', StaffName)) as 'Staffs First Name', 
@@ -253,9 +452,9 @@ where DrinkQuantity > 1
 --6 
 --================================================================  
 Select 
-StaffID,
-CONVERT(varchar, TransctionDate, 107) as 'Transaction Date',
-REPLACE(MovieID, 'MO', 'Movie') as 'Movie ID', 
+MS.StaffID,
+CONVERT(varchar, TH.TransactionDate, 107) as 'Transaction Date',
+REPLACE(MMT.MovieID, 'MO', 'Movie') as 'Movie ID', 
 concat('Film ', MovieName) as 'Movie Name', 
 MovieCategory
 from MsStaff MS join 
@@ -280,7 +479,6 @@ MMT.MovieID = TDT.MovieID, (
                   CAST(SUBSTRING(MovieDuration, 7, 2) AS INT))
      FROM MsMovie)
 ) as MM   
-where MMT.MovieID in ('MO3001') 
 --================================================================  
  
 
