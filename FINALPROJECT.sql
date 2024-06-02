@@ -234,7 +234,7 @@ INSERT INTO TransactionDetailFood VALUES
 ('TR012',	'FO920',	1),
 ('TR013',	'FO912',	2),
 ('TR014',	'FO213',	2),
-('TR015',   'FO094',	2),
+('TR015',   	'FO094',	2),
 ('TR015',	'FO100',	1),
 ('TR015',	'FO921',	1),
 ('TR015',	'FO234',	1),
@@ -547,10 +547,33 @@ SELECT AVG(MovieDuration) as 'avg' FROM MsMovie) as alias
 WHERE m.MovieID LIKE('MO003') AND MovieDuration > alias.avg
 --================================================================  
  
--- 7 (PROBLEM)
+-- 7 (BERHASIL)
 --================================================================  
- SELECT
-
+SELECT
+TotalSold.[Last Name] as 'Last Name',
+Totalsold.Sold as 'Total Movie Sold'
+FROM(
+	SELECT
+	RIGHT(CustomerName, CHARINDEX(' ', REVERSE(CustomerName) + ' ') - 1) AS 'Last Name',
+	SUM(TicketQuantity*MoviePrice) as Sold
+	FROM MsCustomer c
+	JOIN TransactionHeader h ON c.CustomerID = h.CustomerID
+	JOIN TransactionDetailTicket dt ON h.TransactionID = dt.TransactionID
+	JOIN MsMovie m ON dt.MovieID = m.MovieID
+	GROUP BY CustomerName) as TotalSold,
+		(
+		SELECT AVG(SOURCE.Sold) as avg
+		FROM (
+				SELECT
+				RIGHT(CustomerName, CHARINDEX(' ', REVERSE(CustomerName) + ' ') - 1) AS 'Last Name',
+				SUM(TicketQuantity*MoviePrice) as Sold
+				FROM MsCustomer c
+				JOIN TransactionHeader h ON c.CustomerID = h.CustomerID
+				JOIN TransactionDetailTicket dt ON h.TransactionID = dt.TransactionID
+				JOIN MsMovie m ON dt.MovieID = m.MovieID
+				GROUP BY CustomerName) as SOURCE
+				) AS AVERAGE
+			WHERE TotalSold.Sold > AVERAGE.avg
 --================================================================  
 
 
