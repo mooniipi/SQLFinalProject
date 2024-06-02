@@ -1,9 +1,9 @@
 CREATE DATABASE CineMoFie
 GO
-USE CineMoFie
+USE CineMoFiel
 GO
 --DROP STAGING AREA
-DROP DATABASE CineMoFie 
+DROP DATABASE CineMoFie
 DROP TABLE MsStaff 
 DROP TABLE MsCustomer
 DROP TABLE MsFood 
@@ -292,7 +292,7 @@ INSERT INTO TransactionDetailDrink VALUES
 ('TR020', 'DR812', '3'),
 ('TR021', 'DR923', '5'),
 ('TR021', 'DR981', '2'),
-('TR022', 'DR012', '2'),
+('TR022', 'DR217', '2'),
 ('TR022', 'DR013', '3'),
 ('TR022', 'DR012', '2'),
 ('TR023', 'DR103', '1'),
@@ -457,10 +457,10 @@ Where StaffGender = 'Male' and Year(PurchaseDate) = 2019
 group by Ms.StaffName, PurchaseDate
 --================================================================
 
---2 (Masih ada problem)
+--2 (BERHASIL)
 --================================================================ 
 select 
-Convert(Integer, MP.PurchaseID) AS 'PurchaseID',
+MP.PurchaseID AS 'PurchaseID',
 LOWER(MS.SupplierName) as 'Supplier Name', 
 SUM(PDD.DrinkQuantityPurchase) as 'Total Drink Purchase'
 from MsSupplier MS join 
@@ -468,8 +468,8 @@ MsPurchase MP on
 MS.SupplierID = MP.SupplierID Join 
 PurchaseDetailDrink PDD on 
 PDD.PurchaseID = MP.PurchaseID 
-Group By MP.PurchaseID, MS.SupplierName 
-Having SUM(PDD.DrinkQuantityPurchase) < 5 AND MP.PurchaseID % 2 = 0
+Group By MP.PurchaseID, MS.SupplierName, MP.PurchaseID
+Having SUM(PDD.DrinkQuantityPurchase) < 5 AND CAST(SUBSTRING(MP.PurchaseID, 3, LEN(MP.PurchaseID) - 2) AS INT) % 2 = 0
 --================================================================
 
 --3 (BERHASIL)
@@ -511,19 +511,19 @@ group by FoodCategory, StaffName
 Having Avg(FoodQuantityPurchase) > 2 
 --================================================================ 
 
---5 (PROBLEM)
+--5 (BERHASIL)
 --================================================================  
 Select
 TH.TransactionID, 
 dateadd(year, 1, TransactionDate) as 'Drink Transaction Forecast', 
-concat(DrinkQuantity, ' Cup') as 'Drink Quantity' 
+concat(DrinkQuantity, ' Cup') as 'Drink Quantity'
 from TransactionHeader TH join 
 TransactionDetailDrink THD on 
 TH.TransactionID = THD.TransactionID, ( 
-	select DrinkCategory from MsDrink 
-	where DrinkCategory in ('Soft Drink', 'Herbal')
-)as MD
-where DrinkQuantity > 1 
+	select MD = DrinkID from MsDrink 
+	where DrinkCategory in ('Soft Drink' , 'Herbal')
+)as alias
+where THD.DrinkID = alias.MD AND DrinkQuantity > 1 
 --================================================================  
 
 --6 (PROBLEM)
