@@ -44,6 +44,7 @@ FoodCategory VARCHAR(50) NOT NULL,
 FoodPrice integer NOT NULL,
 CONSTRAINT FCatChecker CHECK(FoodCategory IN('Pasta' , 'Salad' , 'Sandwich' , 'Snack' , 'Fried'))
 )
+	
 CREATE TABLE MsDrink (
 DrinkID CHAR(5) PRIMARY KEY CHECK(DrinkID LIKE('DR[0-9][0-9][0-9]')) NOT NULL,
 DrinkName VARCHAR(50) NOT NULL,
@@ -51,6 +52,7 @@ DrinkCategory VARCHAR(50) NOT NULL,
 DrinkPrice integer NOT NULL,
 CONSTRAINT DCatChecker CHECK(DrinkCategory IN('Soft Drink' , 'Tea' , 'Coffee' , 'Milk' , 'Herbal'))
 )
+	
 CREATE TABLE MsMovie (
 MovieID CHAR(5) PRIMARY KEY CHECK(MovieID LIKE('MO[0-9][0-9][0-9]')) NOT NULL,
 MovieName VARCHAR(50) NOT NULL,
@@ -59,6 +61,7 @@ MovieCategory VARCHAR(50) CHECK(MovieCategory IN('U', 'PG', 'PG-13', 'R', 'NC-17
 MovieRating Integer CHECK(MovieRating IN('1', '2', '3', '4', '5')) NOT NULL,
 MoviePrice integer NOT NULL
 )
+	
 CREATE TABLE MsSupplier (
 SupplierID CHAR(5) PRIMARY KEY CHECK(SupplierID LIKE('SU[0-9][0-9][0-9]')) NOT NULL,
 SupplierName VARCHAR(50) NOT NULL,
@@ -70,36 +73,42 @@ TransactionDate date NOT NULL,
 StaffID CHAR(5) FOREIGN KEY REFERENCES MsStaff(StaffID) NOT NULL,
 CustomerID CHAR(5) FOREIGN KEY REFERENCES MsCustomer(CustomerID) NOT NULL,
 )
+	
 CREATE TABLE TransactionDetailFood (
 TransactionID CHAR(5) FOREIGN KEY REFERENCES TransactionHeader(TransactionID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
 FoodID CHAR(5) FOREIGN KEY REFERENCES MsFood(FoodID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
 FoodQuantity INT NOT NULL,
 Primary Key(TransactionID, FoodID)
 )
+	
 CREATE TABLE TransactionDetailDrink (
 TransactionID CHAR(5) FOREIGN KEY REFERENCES TransactionHeader(TransactionID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
 DrinkID CHAR(5) FOREIGN KEY REFERENCES MsDrink(DrinkID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
 DrinkQuantity INT NOT NULL, 
 Primary Key(TransactionID, DrinkID)
 )
+	
 CREATE TABLE TransactionDetailTicket (
 TransactionID CHAR(5) FOREIGN KEY REFERENCES TransactionHeader(TransactionID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
 MovieID CHAR(5) FOREIGN KEY REFERENCES MsMovie(MovieID) NOT NULL,
 TicketQuantity INT NOT NULL, 
 Primary Key(TransactionID, MovieID)
 )
+	
 CREATE TABLE MsPurchase (
 PurchaseID CHAR(5) PRIMARY KEY CHECK(PurchaseID LIKE('PU[0-9][0-9][0-9]')) NOT NULL,
 StaffID CHAR(5) FOREIGN KEY REFERENCES MsStaff(StaffID) NOT NULL,
 SupplierID CHAR(5) FOREIGN KEY REFERENCES MsSupplier(SupplierID) NOT NULL,
 PurchaseDate date NOT NULL,
 ) 
+	
 CREATE TABLE PurchaseDetailFood( 
 PurchaseID CHAR(5) FOREIGN KEY REFERENCES MsPurchase(PurchaseID) NOT NULL, 
 FoodID CHAR(5) FOREIGN KEY REFERENCES MsFood(FoodID) NOT NULL, 
 FoodQuantityPurchase INTEGER NOT NULL, 
 Primary Key(PurchaseID, FoodID)
 ) 
+	
 CREATE TABLE PurchaseDetailDrink(
 PurchaseID CHAR(5) FOREIGN KEY REFERENCES MsPurchase(PurchaseID) NOT NULL, 
 DrinkID CHAR(5) FOREIGN KEY REFERENCES MsDrink(DrinkID) NOT NULL, 
