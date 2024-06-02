@@ -564,80 +564,63 @@ FROM(
 		(
 		SELECT AVG(SOURCE.Sold) as avg
 		FROM (
-				SELECT
-				RIGHT(CustomerName, CHARINDEX(' ', REVERSE(CustomerName) + ' ') - 1) AS 'Last Name',
-				SUM(TicketQuantity*MoviePrice) as Sold
-				FROM MsCustomer c
-				JOIN TransactionHeader h ON c.CustomerID = h.CustomerID
-				JOIN TransactionDetailTicket dt ON h.TransactionID = dt.TransactionID
-				JOIN MsMovie m ON dt.MovieID = m.MovieID
-				GROUP BY CustomerName) as SOURCE
-				) AS AVERAGE
-			WHERE TotalSold.Sold > AVERAGE.avg
+			SELECT
+			RIGHT(CustomerName, CHARINDEX(' ', REVERSE(CustomerName) + ' ') - 1) AS 'Last Name',
+			SUM(TicketQuantity*MoviePrice) as Sold
+			FROM MsCustomer c
+			JOIN TransactionHeader h ON c.CustomerID = h.CustomerID
+			JOIN TransactionDetailTicket dt ON h.TransactionID = dt.TransactionID
+			JOIN MsMovie m ON dt.MovieID = m.MovieID
+			GROUP BY CustomerName) as SOURCE
+			) AS AVERAGE
+		WHERE TotalSold.Sold > AVERAGE.avg
 --================================================================  
 
 
 -- 8 (BERHASIL)
 --================================================================  
-SELECT DISTINCT 
+SELECT
 X1.TX as 'Transaction', 
 X1.StaffName as 'Staff Name', 
 X1.CM as 'Customer Name', 
 X1.TD as 'Transaction Date'
 From( 
-		Select   
-		UPPER(Replace(TH.TransactionID, 'TR', 'Transaction ')) as TX, 
-		StaffName, 
-		Concat('Mrs. ', CustomerName) as CM, 
-		YEAR(TransactionDate) as TD,
-		SUM(FoodQuantity * FoodPrice) + SUM(DrinkQuantity * DrinkPrice) + SUM(TicketQuantity * MoviePrice) as TotalTransaction
-		From TransactionHeader TH join 
-		TransactionDetailFood TDF on 
-		TH.TransactionID = TDF.TransactionID join 
-		TransactionDetailDrink TDD on 
-		TH.TransactionID = TDD.TransactionID join 
-		TransactionDetailTicket TDT on 
-		TH.TransactionID = TDT.TransactionID join 
-		MsFood MF on 
-		MF.FoodID = TDF.FoodID join 
-		MsDrink MD on 
-		MD.DrinkID = TDD.DrinkID join 
-		MsMovie MM on 
-		MM.MovieID = TDT.MovieID join 
-		MsStaff Ms on 
-		Ms.StaffID = TH.StaffID join 
-		MsCustomer MC on 
-		MC.CustomerID = TH.CustomerID 
-		where CustomerGender = 'Female'
-		Group by TH.TransactionID, StaffName, CustomerName, YEAR(TransactionDate) 
-) as X1, ( 
-Select 
-Avg(X2.TotalTransaction) as Average 
-from ( 
-		Select   
-		UPPER(Replace(TH.TransactionID, 'TR', 'Transaction ')) as TX, 
-		SUM(FoodQuantity * FoodPrice) + SUM(DrinkQuantity * DrinkPrice) + SUM(TicketQuantity * MoviePrice) as TotalTransaction
-		From TransactionHeader TH join 
-		TransactionDetailFood TDF on 
-		TH.TransactionID = TDF.TransactionID join 
-		TransactionDetailDrink TDD on 
-		TH.TransactionID = TDD.TransactionID join 
-		TransactionDetailTicket TDT on 
-		TH.TransactionID = TDT.TransactionID join 
-		MsFood MF on 
-		MF.FoodID = TDF.FoodID join 
-		MsDrink MD on 
-		MD.DrinkID = TDD.DrinkID join 
-		MsMovie MM on 
-		MM.MovieID = TDT.MovieID join 
-		MsStaff Ms on 
-		Ms.StaffID = TH.StaffID join 
-		MsCustomer MC on 
-		MC.CustomerID = TH.CustomerID 
-		Group by TH.TransactionID, StaffName, CustomerName, YEAR(TransactionDate) 
-		) as X2   
-)as X3
-where X1.TotalTransaction > X3.Average
+	Select   
+	UPPER(Replace(TH.TransactionID, 'TR', 'Transaction ')) as TX, 
+	StaffName, 
+	Concat('Mrs. ', CustomerName) as CM, 
+	YEAR(TransactionDate) as TD,
+	SUM(FoodQuantity * FoodPrice) + SUM(DrinkQuantity * DrinkPrice) + SUM(TicketQuantity * MoviePrice) as TotalTransaction
+	From TransactionHeader TH 
+	join TransactionDetailFood TDF on TH.TransactionID = TDF.TransactionID 
+	join TransactionDetailDrink TDD on TH.TransactionID = TDD.TransactionID 
+	join TransactionDetailTicket TDT on TH.TransactionID = TDT.TransactionID 
+	join MsFood MF on MF.FoodID = TDF.FoodID 
+	join MsDrink MD on MD.DrinkID = TDD.DrinkID 
+	join MsMovie MM on MM.MovieID = TDT.MovieID 
+	join MsStaff Ms on Ms.StaffID = TH.StaffID 
+	join MsCustomer MC on MC.CustomerID = TH.CustomerID 
+	where CustomerGender = 'Female'
+	Group by TH.TransactionID, StaffName, CustomerName, YEAR(TransactionDate) ) as X1, 
+		( 
+			Select 
+			Avg(X2.TotalTransaction) as Average 
+			from ( 
+				Select   
+				UPPER(Replace(TH.TransactionID, 'TR', 'Transaction ')) as TX, 
+				SUM(FoodQuantity * FoodPrice) + SUM(DrinkQuantity * DrinkPrice) + SUM(TicketQuantity * MoviePrice) as TotalTransaction
+				From TransactionHeader TH 
+				join TransactionDetailFood TDF on TH.TransactionID = TDF.TransactionID 
+				join TransactionDetailDrink TDD on TH.TransactionID = TDD.TransactionID 
+				join TransactionDetailTicket TDT on TH.TransactionID = TDT.TransactionID 
+				join MsFood MF on MF.FoodID = TDF.FoodID 
+				join MsDrink MD on MD.DrinkID = TDD.DrinkID 
+				join MsMovie MM on MM.MovieID = TDT.MovieID 
+				join MsStaff Ms on Ms.StaffID = TH.StaffID 
+				join MsCustomer MC on MC.CustomerID = TH.CustomerID 
+				Group by TH.TransactionID, StaffName, CustomerName, YEAR(TransactionDate) ) as X2   
+				)as X3
+			where X1.TotalTransaction > X3.Average
 --================================================================  
 
 --9 (BERHASIL)
@@ -649,13 +632,10 @@ MovieName,
 MovieRating, 
 AVG(TicketQuantity) as 'Average Ticket Bought', 
 SUM(TicketQuantity) as 'Total Ticket Bought'
-from MsStaff MS join 
-TransactionHeader TH on 
-MS.StaffID = TH.StaffID join 
-TransactionDetailTicket TDT on 
-TH.TransactionID = TDT.TransactionID join 
-MsMovie MM on 
-MM.MovieID = TDT.MovieID 
+from MsStaff MS 
+join TransactionHeader TH on MS.StaffID = TH.StaffID 
+join TransactionDetailTicket TDT on TH.TransactionID = TDT.TransactionID 
+join MsMovie MM on MM.MovieID = TDT.MovieID 
 where MovieRating = 5
 Group By MovieName, MovieRating, StaffName
 having SUM(TicketQuantity) > AVG(TicketQuantity);
@@ -668,11 +648,9 @@ select
 FoodName, 
 SUM(FoodQuantity) as 'Total Quantity Sold', 
 AVG(FoodPrice) as 'Average Food Price' 
-from MsFood MF join 
-TransactionDetailFood TDF on 
-MF.FoodID = TDF.FoodID join 
-TransactionHeader TH on 
-TDF.TransactionID = TH.TransactionID
+from MsFood MF 
+join TransactionDetailFood TDF on MF.FoodID = TDF.FoodID 
+join TransactionHeader TH on TDF.TransactionID = TH.TransactionID
 where FoodCategory in ('Sandwich') AND
 Year(TransactionDate) = Year(GETDATE())
 Group by FoodName;
