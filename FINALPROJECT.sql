@@ -577,11 +577,67 @@ FROM(
 --================================================================  
 
 
--- 8 (PROBLEM)
+-- 8 (BERHASIL)
 --================================================================  
- SELECT
-
-
+SELECT DISTINCT 
+X1.TX as 'Transaction', 
+X1.StaffName as 'Staff Name', 
+X1.CM as 'Customer Name', 
+X1.TD as 'Transaction Date'
+From( 
+		Select   
+		UPPER(Replace(TH.TransactionID, 'TR', 'Transaction ')) as TX, 
+		StaffName, 
+		Concat('Mrs. ', CustomerName) as CM, 
+		YEAR(TransactionDate) as TD,
+		SUM(FoodQuantity * FoodPrice) + SUM(DrinkQuantity * DrinkPrice) + SUM(TicketQuantity * MoviePrice) as TotalTransaction
+		From TransactionHeader TH join 
+		TransactionDetailFood TDF on 
+		TH.TransactionID = TDF.TransactionID join 
+		TransactionDetailDrink TDD on 
+		TH.TransactionID = TDD.TransactionID join 
+		TransactionDetailTicket TDT on 
+		TH.TransactionID = TDT.TransactionID join 
+		MsFood MF on 
+		MF.FoodID = TDF.FoodID join 
+		MsDrink MD on 
+		MD.DrinkID = TDD.DrinkID join 
+		MsMovie MM on 
+		MM.MovieID = TDT.MovieID join 
+		MsStaff Ms on 
+		Ms.StaffID = TH.StaffID join 
+		MsCustomer MC on 
+		MC.CustomerID = TH.CustomerID 
+		where CustomerGender = 'Female'
+		Group by TH.TransactionID, StaffName, CustomerName, YEAR(TransactionDate) 
+) as X1, ( 
+Select 
+Avg(X2.TotalTransaction) as Average 
+from ( 
+		Select   
+		UPPER(Replace(TH.TransactionID, 'TR', 'Transaction ')) as TX, 
+		SUM(FoodQuantity * FoodPrice) + SUM(DrinkQuantity * DrinkPrice) + SUM(TicketQuantity * MoviePrice) as TotalTransaction
+		From TransactionHeader TH join 
+		TransactionDetailFood TDF on 
+		TH.TransactionID = TDF.TransactionID join 
+		TransactionDetailDrink TDD on 
+		TH.TransactionID = TDD.TransactionID join 
+		TransactionDetailTicket TDT on 
+		TH.TransactionID = TDT.TransactionID join 
+		MsFood MF on 
+		MF.FoodID = TDF.FoodID join 
+		MsDrink MD on 
+		MD.DrinkID = TDD.DrinkID join 
+		MsMovie MM on 
+		MM.MovieID = TDT.MovieID join 
+		MsStaff Ms on 
+		Ms.StaffID = TH.StaffID join 
+		MsCustomer MC on 
+		MC.CustomerID = TH.CustomerID 
+		Group by TH.TransactionID, StaffName, CustomerName, YEAR(TransactionDate) 
+		) as X2   
+)as X3
+where X1.TotalTransaction > X3.Average
 --================================================================  
 
 --9 (BERHASIL)
