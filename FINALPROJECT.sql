@@ -1,9 +1,9 @@
 CREATE DATABASE CineMoFie
 GO
-USE CineMoFiel
+USE CineMoFie
 GO
 --DROP STAGING AREA
-DROP DATABASE CineMoFie
+DROP DATABASE CineMoFiel 
 DROP TABLE MsStaff 
 DROP TABLE MsCustomer
 DROP TABLE MsFood 
@@ -19,23 +19,24 @@ DROP TABLE PurchaseDetailDrink
 DROP TABLE PurchaseDetailFood
 ------------------------------------------------
 
-
 CREATE TABLE MsStaff (
 StaffID CHAR(5) PRIMARY KEY CHECK(StaffID LIKE('ST[0-9][0-9][0-9]')) NOT NULL,
 StaffName VARCHAR(50) NOT NULL,
-StaffDateOfBirth VARCHAR(50) NOT NULL,
+StaffDateOfBirth date NOT NULL,
 StaffAddress VARCHAR(50) NOT NULL,
 StaffGender VARCHAR(50) NOT NULL,
 CONSTRAINT StaffGenderChecker CHECK(StaffGender IN('Male' , 'Female')), 
 CONSTRAINT CheckDateOfBirthStaff CHECK (DATEDIFF(Year, StaffDateOfBirth, Getdate()) > 17)
 )
+
 CREATE TABLE MsCustomer (
 CustomerID CHAR(5) PRIMARY KEY CHECK(CustomerID LIKE('CU[0-9][0-9][0-9]')) NOT NULL,
 CustomerName VARCHAR(50) NOT NULL,
-CustomerDateOfBirth VARCHAR(50) NOT NULL,
+CustomerDateOfBirth date NOT NULL,
 CustomerGender VARCHAR(50) NOT NULL,
 CONSTRAINT CustomerGenderChecker CHECK(CustomerGender IN('Male' , 'Female'))
 )
+
 CREATE TABLE MsFood (
 FoodID CHAR(5) PRIMARY KEY CHECK(FoodID LIKE('FO[0-9][0-9][0-9]')) NOT NULL,
 FoodName VARCHAR(50) NOT NULL,
@@ -53,9 +54,9 @@ CONSTRAINT DCatChecker CHECK(DrinkCategory IN('Soft Drink' , 'Tea' , 'Coffee' , 
 CREATE TABLE MsMovie (
 MovieID CHAR(5) PRIMARY KEY CHECK(MovieID LIKE('MO[0-9][0-9][0-9]')) NOT NULL,
 MovieName VARCHAR(50) NOT NULL,
-MovieDuration VARCHAR(50) NOT NULL,
+MovieDuration Integer NOT NULL,
 MovieCategory VARCHAR(50) CHECK(MovieCategory IN('U', 'PG', 'PG-13', 'R', 'NC-17')) NOT NULL,
-MovieRating VARCHAR(50) CHECK(MovieRating IN('1', '2', '3', '4', '5')) NOT NULL,
+MovieRating Integer CHECK(MovieRating IN('1', '2', '3', '4', '5')) NOT NULL,
 MoviePrice integer NOT NULL
 )
 CREATE TABLE MsSupplier (
@@ -65,7 +66,7 @@ SupplierAddress VARCHAR(50) NOT NULL
 )
 CREATE TABLE TransactionHeader (
 TransactionID CHAR(5) PRIMARY KEY CHECK (TransactionID LIKE('TR[0-9][0-9][0-9]')) NOT NULL,
-TransactionDate VARCHAR(50) NOT NULL,
+TransactionDate date NOT NULL,
 StaffID CHAR(5) FOREIGN KEY REFERENCES MsStaff(StaffID) NOT NULL,
 CustomerID CHAR(5) FOREIGN KEY REFERENCES MsCustomer(CustomerID) NOT NULL,
 )
@@ -91,7 +92,7 @@ CREATE TABLE MsPurchase (
 PurchaseID CHAR(5) PRIMARY KEY CHECK(PurchaseID LIKE('PU[0-9][0-9][0-9]')) NOT NULL,
 StaffID CHAR(5) FOREIGN KEY REFERENCES MsStaff(StaffID) NOT NULL,
 SupplierID CHAR(5) FOREIGN KEY REFERENCES MsSupplier(SupplierID) NOT NULL,
-PurchaseDate VARCHAR(50) NOT NULL,
+PurchaseDate date NOT NULL,
 ) 
 CREATE TABLE PurchaseDetailFood( 
 PurchaseID CHAR(5) FOREIGN KEY REFERENCES MsPurchase(PurchaseID) NOT NULL, 
@@ -134,40 +135,40 @@ INSERT INTO MsCustomer VALUES
 ('CU987', 'Celine Tan', '2005-03-16', 'Female')
 
 INSERT INTO MsFood VALUES
-('FO012', 'Caramel Popcorn', 'Fried', '83868'),
-('FO213', 'Butter Popcorn', 'Fried', '90905'),
-('FO234', 'Siomay', 'Fried', '93859'),
-('FO912', 'Fettucine Alfredo', 'Pasta', '11640'),
-('FO221', 'Nachos', 'Fried', '27386'),
-('FO094', 'Caesar Salad', 'Salad', '75328'),
-('FO921', 'Chitato', 'Snack', '73192'),
-('FO920', 'Spaggeti Bolognese', 'Pasta', '18411'),
-('FO100', 'French Fries', 'Fried', '13446'),
-('FO182', 'Club Sandwich', 'Sandwich', '24855')
+('FO012', 'Caramel Popcorn', 'Fried', 25),
+('FO213', 'Butter Popcorn', 'Fried', 35),
+('FO234', 'Siomay', 'Fried', 15),
+('FO912', 'Fettucine Alfredo', 'Pasta', 40),
+('FO221', 'Nachos', 'Fried', 25),
+('FO094', 'Caesar Salad', 'Salad', 30),
+('FO921', 'Chitato', 'Snack', 10),
+('FO920', 'Spaggeti Bolognese', 'Pasta', 42),
+('FO100', 'French Fries', 'Fried', 13),
+('FO182', 'Club Sandwich', 'Sandwich', 24)
 
 INSERT INTO MsDrink VALUES
-('DR217', 'Cola-cola', 'Soft Drink', '21553'),
-('DR019', 'Sprite', 'Soft Drink', '11807'),
-('DR981', 'Fanta', 'Soft Drink', '84387'),
-('DR934', 'Banana Milk', 'Milk', '80476'),
-('DR012', 'Turkish Coffee', 'Coffee', '88929'),
-('DR103', 'Tobruk Coffee', 'Coffee', '65814'),
-('DR021', 'Jasmine Tea', 'Herbal', '40542'),
-('DR812', 'Charmonile Tea', 'Soft Drink', '83270'),
-('DR923', 'Oolong Tea', 'Herbal', '65091'),
-('DR013', 'English Breakfast', 'Herbal', '94055')
+('DR217', 'Cola-cola', 'Soft Drink', 21),
+('DR019', 'Sprite', 'Soft Drink', 22),
+('DR981', 'Fanta', 'Soft Drink', 23),
+('DR934', 'Banana Milk', 'Milk', 8),
+('DR012', 'Turkish Coffee', 'Coffee', 30),
+('DR103', 'Tobruk Coffee', 'Coffee', 35),
+('DR021', 'Jasmine Tea', 'Herbal', 5),
+('DR812', 'Charmonile Tea', 'Soft Drink', 15),
+('DR923', 'Oolong Tea', 'Herbal', 25),
+('DR013', 'English Breakfast Tea', 'Herbal', 27)
 
 INSERT INTO MsMovie VALUES
-('MO001', 'Godfather 1', '02:37:42', 'R','1', '96008'),
-('MO002', 'Godfather 2', '02:52:33', 'R','1', '78772'),
-('MO003', 'Siksa Kubur', '02:06:28', 'NC-17','3', '71791'),
-('MO004', 'The Irishman', '01:36:09', 'R','5', '94409'),
-('MO005', 'Desa Penari', '01:18:03', 'NC-17','3', '86106'),
-('MO006', 'Godfather 3', '01:13:20', 'R','1', '98662'),
-('MO007', 'The Goodfellas', '02:57:42', 'R','5', '77032'),
-('MO008', 'Sing 2', '01:33:39', 'PG-13','4', '85478'),
-('MO009', 'Arabian Night', '02:02:55', 'NC-17','4', '81501'),
-('MO010', 'TopGun: Maverick', '02:57:28', 'PG-13','4', '98895')
+('MO001', 'Godfather 1', 157, 'R', 1 , 96),
+('MO002', 'Godfather 2', 172 , 'R', 1 , 78),
+('MO003', 'Siksa Kubur', 199 , 'NC-17', 3 , 71),
+('MO004', 'The Irishman', 96 , 'R', 5 , 94),
+('MO005', 'Desa Penari',  78 , 'NC-17', 3 , 86),
+('MO006', 'Godfather 3',  73 , 'R', 1 , 98),
+('MO007', 'The Goodfellas', 177 , 'R', 5 , 77),
+('MO008', 'Sing 2', 93 , 'PG-13', 4 , 85),
+('MO009', 'Arabian Night', 122 , 'NC-17', 4 , 81),
+('MO010', 'TopGun: Maverick', 178 , 'PG-13', 4 , 98)
 
 INSERT INTO MsSupplier VALUES 
 ('SU091', 'PT. Megahita', 'Jl. Permata 1'),
@@ -183,262 +184,265 @@ INSERT INTO MsSupplier VALUES
 
 INSERT INTO TransactionHeader(TransactionID, StaffID, CustomerID, TransactionDate)  
 VALUES
-('TR001',	'ST108',	'CU901',	'2019-1-5'),
-('TR002',	'ST108',	'CU222',	'2019-8-8'),
+('TR001',	'ST108',	'CU901',	'2019-01-05'),
+('TR002',	'ST108',	'CU222',	'2019-08-08'),
 ('TR003',	'ST012',	'CU222',	'2019-12-25'),
-('TR004',	'ST121',	'CU911',	'2019-6-21'),
-('TR005',	'ST111',	'CU478',	'2019-8-24'),
-('TR006',	'ST111',	'CU911',	'2019-1-4'),
-('TR007',	'ST028',	'CU652',	'2019-9-13'),
-('TR008',	'ST981',	'CU823',	'2019-9-16'),
-('TR009',	'ST981',	'CU764',	'2019-4-16'),
-('TR010',	'ST912',	'CU764',	'2019-1-17'),
-('TR011',	'ST444',	'CU827',	'2019-6-9'),
-('TR012',	'ST444',	'CU008',	'2019-12-29'),
-('TR013',	'ST999',	'CU987',	'2019-2-9'),
-('TR014',	'ST888',	'CU008',	'2019-9-3'),
-('TR015',	'ST888',	'CU827',	'2019-7-24'),
-('TR016',	'ST111',	'CU478',	'2019-10-9'),
-('TR017',	'ST028',	'CU911',	'2019-8-2'),
-('TR018',	'ST981',	'CU652',	'2019-12-2'),
-('TR019',	'ST981',	'CU823',	'2019-6-19'),
-('TR020',	'ST912',	'CU764',	'2019-10-9'),
-('TR021',	'ST444',	'CU764',	'2019-11-1'),
-('TR022',	'ST444',	'CU827',	'2019-12-23'),
-('TR023',	'ST999',	'CU008',	'2019-6-22'),
-('TR024',	'ST888',	'CU987',	'2019-10-23'),
-('TR025',	'ST108',	'CU008',	'2019-4-21')
+('TR004',	'ST121',	'CU911',	'2020-06-21'),
+('TR005',	'ST111',	'CU478',	'2020-08-24'),
+('TR006',	'ST111',	'CU911',	'2020-01-04'),
+('TR007',	'ST028',	'CU652',	'2020-09-13'),
+('TR008',	'ST981',	'CU823',	'2020-09-16'),
+('TR009',	'ST981',	'CU764',	'2021-04-16'),
+('TR010',	'ST912',	'CU764',	'2021-01-17'),
+('TR011',	'ST444',	'CU827',	'2021-06-09'),
+('TR012',	'ST444',	'CU008',	'2021-12-29'),
+('TR013',	'ST999',	'CU987',	'2021-02-09'),
+('TR014',	'ST888',	'CU008',	'2022-09-03'),
+('TR015',	'ST888',	'CU827',	'2022-07-24'),
+('TR016',	'ST111',	'CU478',	'2022-10-09'),
+('TR017',	'ST028',	'CU911',	'2022-08-02'),
+('TR018',	'ST981',	'CU652',	'2022-12-02'),
+('TR019',	'ST981',	'CU823',	'2022-06-19'),
+('TR020',	'ST912',	'CU764',	'2023-10-09'),
+('TR021',	'ST444',	'CU764',	'2023-11-01'),
+('TR022',	'ST444',	'CU827',	'2023-12-23'),
+('TR023',	'ST999',	'CU008',	'2023-06-22'),
+('TR024',	'ST888',	'CU987',	'2024-10-23'),
+('TR025',	'ST108',	'CU008',	'2024-04-21'),
+('TR026',  'ST028',		'CU008',	'2024-02-13'),
+('TR027',	'ST028',	'CU911',	'2024-05-02')
 
 INSERT INTO TransactionDetailFood VALUES
-('TR001',	'FO012',	'2'),
-('TR001',	'FO213',	'2'),
-('TR001',	'FO234',	'3'),
-('TR002',	'FO912',	'5'),
-('TR003',	'FO221',	'2'),
-('TR003',	'FO094',	'4'),
-('TR004',	'FO921',	'1'),
-('TR005',	'FO920',	'3'),
-('TR005',	'FO100',	'2'),
-('TR006',	'FO182',	'1'),
-('TR007',	'FO094',	'1'),
-('TR008',	'FO012',	'2'),
-('TR009',	'FO100',	'4'),
-('TR010',	'FO234',	'2'),
-('TR010',	'FO182',	'3'),
-('TR010',	'FO921',	'1'),
-('TR010',	'FO012',	'1'),
-('TR011',	'FO221',	'1'),
-('TR012',	'FO920',	'1'),
-('TR013',	'FO912',	'2'),
-('TR014',	'FO213',	'2'),
-('TR015',   'FO094',	'2'),
-('TR015',	'FO100',	'1'),
-('TR015',	'FO921',	'1'),
-('TR015',	'FO234',	'1'),
-('TR016',	'FO100',	'2'),
-('TR016',	'FO234',	'2'),
-('TR017',	'FO182',	'3'),
-('TR018',	'FO921',	'5'),
-('TR018',	'FO012',	'2'),
-('TR018',	'FO221',	'4'),
-('TR019',	'FO920',	'1'),
-('TR020',	'FO912',	'3'),
-('TR021',	'FO213',	'2'),
-('TR021',	'FO094',	'1'),
-('TR022',	'FO100',	'1'),
-('TR022',	'FO921',	'2'),
-('TR022',	'FO234',	'4'),
-('TR022',	'FO012',	'1'),
-('TR023',	'FO213',	'1'),
-('TR023',	'FO234',	'2'),
-('TR024',	'FO912',	'2'),
-('TR025',	'FO221',	'2'),
-('TR025',	'FO094',	'1') 
+('TR001',	'FO012',	2),
+('TR001',	'FO213',	2),
+('TR001',	'FO234',	3),
+('TR002',	'FO912',	5),
+('TR003',	'FO221',	2),
+('TR003',	'FO094',	4),
+('TR004',	'FO921',	1),
+('TR005',	'FO920',	3),
+('TR005',	'FO100',	2),
+('TR006',	'FO182',	1),
+('TR007',	'FO094',	1),
+('TR008',	'FO012',	2),
+('TR009',	'FO100',	4),
+('TR010',	'FO234',	2),
+('TR010',	'FO182',	3),
+('TR010',	'FO921',	1),
+('TR010',	'FO012',	1),
+('TR011',	'FO221',	1),
+('TR012',	'FO920',	1),
+('TR013',	'FO912',	2),
+('TR014',	'FO213',	2),
+('TR015',   'FO094',	2),
+('TR015',	'FO100',	1),
+('TR015',	'FO921',	1),
+('TR015',	'FO234',	1),
+('TR016',	'FO100',	2),
+('TR016',	'FO234',	2),
+('TR017',	'FO182',	3),
+('TR018',	'FO921',	5),
+('TR018',	'FO012',	2),
+('TR018',	'FO221',	4),
+('TR019',	'FO920',	1),
+('TR020',	'FO912',	3),
+('TR021',	'FO213',	2),
+('TR021',	'FO094',	1),
+('TR022',	'FO100',	1),
+('TR022',	'FO921',	2),
+('TR022',	'FO234',	4),
+('TR022',	'FO012',	1),
+('TR023',	'FO213',	1),
+('TR023',	'FO234',	2),
+('TR024',	'FO912',	2),
+('TR025',	'FO182',	2),
+('TR025',	'FO094',	1) 
 
 INSERT INTO TransactionDetailDrink VALUES
-('TR001', 'DR217', '3'),
-('TR002', 'DR019', '1'),
-('TR002', 'DR021', '2'),
-('TR002', 'DR812', '3'),
-('TR003', 'DR981', '2'),
-('TR003', 'DR021', '2'),
-('TR004', 'DR934', '2'),
-('TR004', 'DR923', '3'),
-('TR004', 'DR013', '4'),
-('TR004', 'DR012', '1'),
-('TR004', 'DR981', '3'),
-('TR005', 'DR012', '4'),
-('TR006', 'DR103', '2'),
-('TR007', 'DR021', '2'),
-('TR008', 'DR812', '3'),
-('TR009', 'DR923', '5'),
-('TR009', 'DR981', '2'),
-('TR009', 'DR012', '2'),
-('TR010', 'DR013', '3'),
-('TR011', 'DR012', '2'),
-('TR012', 'DR103', '1'),
-('TR013', 'DR217', '1'),
-('TR014', 'DR019', '4'),
-('TR015', 'DR981', '2'),
-('TR015', 'DR103', '1'),
-('TR016', 'DR934', '2'),
-('TR017', 'DR923', '3'),
-('TR017', 'DR013', '4'),
-('TR017', 'DR012', '1'),
-('TR018', 'DR981', '3'),
-('TR018', 'DR012', '4'),
-('TR019', 'DR103', '2'),
-('TR019', 'DR021', '2'),
-('TR020', 'DR812', '3'),
-('TR021', 'DR923', '5'),
-('TR021', 'DR981', '2'),
-('TR022', 'DR217', '2'),
-('TR022', 'DR013', '3'),
-('TR022', 'DR012', '2'),
-('TR023', 'DR103', '1'),
-('TR024', 'DR217', '1'),
-('TR024', 'DR019', '1'),
-('TR025', 'DR217', '1'),
-('TR025', 'DR019', '4')
+('TR001', 'DR217', 3),
+('TR002', 'DR019', 1),
+('TR002', 'DR021', 2),
+('TR002', 'DR812', 3),
+('TR003', 'DR981', 2),
+('TR003', 'DR021', 2),
+('TR004', 'DR934', 2),
+('TR004', 'DR923', 3),
+('TR004', 'DR013', 4),
+('TR004', 'DR012', 1),
+('TR004', 'DR981', 3),
+('TR005', 'DR012', 4),
+('TR006', 'DR103', 2),
+('TR007', 'DR021', 2),
+('TR008', 'DR812', 3),
+('TR009', 'DR923', 5),
+('TR009', 'DR981', 2),
+('TR009', 'DR012', 2),
+('TR010', 'DR013', 3),
+('TR011', 'DR012', 2),
+('TR012', 'DR103', 1),
+('TR013', 'DR217', 1),
+('TR014', 'DR019', 4),
+('TR015', 'DR981', 2),
+('TR015', 'DR103', 1),
+('TR016', 'DR934', 2),
+('TR017', 'DR923', 3),
+('TR017', 'DR013', 4),
+('TR017', 'DR012', 1),
+('TR018', 'DR981', 3),
+('TR018', 'DR012', 4),
+('TR019', 'DR103', 2),
+('TR019', 'DR021', 2),
+('TR020', 'DR812', 3),
+('TR021', 'DR923', 5),
+('TR021', 'DR981', 2),
+('TR022', 'DR217', 2),
+('TR022', 'DR013', 3),
+('TR022', 'DR012', 2),
+('TR023', 'DR103', 1),
+('TR024', 'DR217', 1),
+('TR024', 'DR019', 1),
+('TR025', 'DR217', 1),
+('TR025', 'DR019', 4)
 
 INSERT INTO TransactionDetailTicket VALUES
-('TR001', 'MO001', '5'),
-('TR001', 'MO002', '2'),
-('TR002', 'MO003', '3'),
-('TR002', 'MO009', '4'),
-('TR003', 'MO010', '2'),
-('TR004', 'MO002', '2'),
-('TR005', 'MO005', '4'),
-('TR005', 'MO002', '1'),
-('TR005', 'MO006', '1'),
-('TR005', 'MO008', '3'),
-('TR006', 'MO006', '5'),
-('TR007', 'MO007', '1'),
-('TR007', 'MO001', '4'),
-('TR007', 'MO008', '3'),
-('TR008', 'MO008', '4'),
-('TR009', 'MO009', '4'),
-('TR010', 'MO010', '4'),
-('TR010', 'MO006', '2'),
-('TR010', 'MO005', '2'),
-('TR010', 'MO009', '1'),
-('TR011', 'MO005', '2'),
-('TR011', 'MO006', '2'),
-('TR013', 'MO008', '3'),
-('TR014', 'MO009', '5'),
-('TR015', 'MO001', '2'),
-('TR016', 'MO003', '4'),
-('TR016', 'MO009', '1'),
-('TR016', 'MO010', '1'),
-('TR017', 'MO004', '3'),
-('TR017', 'MO005', '5'),
-('TR018', 'MO005', '1'),
-('TR018', 'MO006', '4'),
-('TR019', 'MO008', '3'),
-('TR019', 'MO006', '4'),
-('TR019', 'MO007', '4'),
-('TR020', 'MO001', '4'),
-('TR021', 'MO008', '2'),
-('TR022', 'MO008', '2'),
-('TR022', 'MO009', '1'),
-('TR023', 'MO010', '2'),
-('TR024', 'MO006', '5'),
-('TR024', 'MO005', '1'),
-('TR025', 'MO009', '4'),
-('TR025', 'MO005', '3')
+('TR001', 'MO001', 5),
+('TR001', 'MO002', 2),
+('TR002', 'MO003', 3),
+('TR002', 'MO009', 4),
+('TR003', 'MO010', 2),
+('TR004', 'MO002', 2),
+('TR005', 'MO005', 4),
+('TR005', 'MO002', 1),
+('TR005', 'MO006', 1),
+('TR005', 'MO008', 3),
+('TR006', 'MO006', 5),
+('TR007', 'MO007', 1),
+('TR007', 'MO003', 4),
+('TR007', 'MO008', 3),
+('TR008', 'MO008', 4),
+('TR009', 'MO009', 4),
+('TR010', 'MO010', 4),
+('TR010', 'MO006', 2),
+('TR010', 'MO005', 2),
+('TR010', 'MO009', 1),
+('TR011', 'MO005', 2),
+('TR011', 'MO006', 2),
+('TR013', 'MO008', 3),
+('TR014', 'MO009', 5),
+('TR015', 'MO001', 2),
+('TR016', 'MO003', 4),
+('TR016', 'MO009', 1),
+('TR016', 'MO010', 1),
+('TR017', 'MO004', 3),
+('TR017', 'MO005', 5),
+('TR018', 'MO005', 1),
+('TR018', 'MO006', 4),
+('TR019', 'MO008', 3),
+('TR019', 'MO006', 4),
+('TR019', 'MO007', 4),
+('TR020', 'MO001', 4),
+('TR021', 'MO008', 2),
+('TR022', 'MO008', 2),
+('TR022', 'MO009', 1),
+('TR023', 'MO010', 2),
+('TR024', 'MO006', 5),
+('TR024', 'MO005', 1),
+('TR025', 'MO009', 4),
+('TR025', 'MO005', 3),
+('TR026', 'MO007' , 5),
+('TR027', 'MO007' , 12)
 
 INSERT INTO MsPurchase VALUES 
-('PU201', 'ST999', 'SU091', '2018-12-1'), 
-('PU921', 'ST981', 'SU921', '2018-12-3'), 
-('PU312', 'ST888', 'SU871', '2018-12-10'), 
-('PU888', 'ST888', 'SU827', '2019-4-1'), 
-('PU001', 'ST999', 'SU833', '2019-4-1'), 
-('PU845', 'ST981', 'SU718', '2019-5-15'), 
-('PU827', 'ST981', 'SU825', '2019-6-1'), 
-('PU821', 'ST108', 'SU541', '2019-7-9'), 
-('PU999', 'ST012', 'SU931', '2019-9-10'), 
-('PU838', 'ST981', 'SU931', '2019-10-9'), 
-('PU011', 'ST999', 'SU091', '2019-11-12'), 
-('PU012', 'ST888', 'SU541', '2019-11-14'), 
-('PU013', 'ST981', 'SU825', '2019-11-15'), 
-('PU014', 'ST999', 'SU091', '2019-12-1'), 
-('PU015', 'ST108', 'SU931', '2020-1-1') 
+('PU201', 'ST999', 'SU091', '2019-12-01'), 
+('PU921', 'ST981', 'SU921', '2019-12-03'), 
+('PU312', 'ST888', 'SU871', '2019-12-10'), 
+('PU888', 'ST888', 'SU827', '2019-04-01'), 
+('PU001', 'ST999', 'SU833', '2019-04-01'), 
+('PU845', 'ST981', 'SU718', '2019-05-15'), 
+('PU827', 'ST981', 'SU825', '2019-06-01'), 
+('PU821', 'ST108', 'SU541', '2019-07-09'), 
+('PU999', 'ST012', 'SU931', '2020-09-10'), 
+('PU838', 'ST981', 'SU931', '2020-10-09'), 
+('PU011', 'ST999', 'SU091', '2021-11-12'), 
+('PU012', 'ST888', 'SU541', '2021-11-14'), 
+('PU013', 'ST981', 'SU825', '2022-11-15'), 
+('PU014', 'ST999', 'SU091', '2023-12-1'), 
+('PU015', 'ST108', 'SU931', '2024-01-01') 
 
 INSERT INTO PurchaseDetailFood VALUES 
-('PU201', 'FO012', '1'),
-('PU201', 'FO213', '2'),
-('PU921', 'FO234', '3'),
-('PU921', 'FO912', '4'),
-('PU312', 'FO221', '5'),
-('PU312', 'FO094', '1'),
-('PU888', 'FO921', '2'),
-('PU888', 'FO920', '3'),
-('PU888', 'FO100', '4'),
-('PU001', 'FO182', '5'),
-('PU001', 'FO012', '1'),
-('PU001', 'FO213', '2'), 
-('PU001', 'FO234', '3'),
-('PU845', 'FO912', '4'),
-('PU845', 'FO221', '5'),
-('PU827', 'FO094', '1'),
-('PU827', 'FO921', '2'),
-('PU827', 'FO920', '3'),
-('PU827', 'FO100', '4'), 
-('PU821', 'FO182', '5'),
-('PU821', 'FO012', '1'),
-('PU999', 'FO213', '2'),
-('PU999', 'FO234', '3'), 
-('PU838', 'FO912', '4'), 
-('PU838', 'FO221', '5'), 
-('PU011', 'FO012', '1'),
-('PU011', 'FO213', '2'),
-('PU012', 'FO234', '3'),
-('PU013', 'FO912', '4'),
-('PU013', 'FO221', '5'),
-('PU013', 'FO094', '1'),
-('PU014', 'FO921', '2'),
-('PU014', 'FO920', '3'),
-('PU014', 'FO100', '4'),
-('PU015', 'FO182', '5')
+('PU201', 'FO012', 1),
+('PU201', 'FO213', 2),
+('PU921', 'FO234', 3),
+('PU921', 'FO912', 4),
+('PU312', 'FO221', 5),
+('PU312', 'FO094', 1),
+('PU888', 'FO921', 2),
+('PU888', 'FO920', 3),
+('PU888', 'FO100', 4),
+('PU001', 'FO182', 5),
+('PU001', 'FO012', 1),
+('PU001', 'FO213', 2), 
+('PU001', 'FO234', 3),
+('PU845', 'FO912', 4),
+('PU845', 'FO221', 5),
+('PU827', 'FO094', 1),
+('PU827', 'FO921', 2),
+('PU827', 'FO920', 3),
+('PU827', 'FO100', 4), 
+('PU821', 'FO182', 5),
+('PU821', 'FO012', 1),
+('PU999', 'FO213', 2),
+('PU999', 'FO234', 3), 
+('PU838', 'FO912', 4), 
+('PU838', 'FO221', 5), 
+('PU011', 'FO012', 1),
+('PU011', 'FO213', 2),
+('PU012', 'FO234', 3),
+('PU013', 'FO912', 4),
+('PU013', 'FO221', 5),
+('PU013', 'FO094', 1),
+('PU014', 'FO921', 2),
+('PU014', 'FO920', 3),
+('PU014', 'FO100', 4),
+('PU015', 'FO182', 5)
 
 INSERT INTO PurchaseDetailDrink VALUES 
-('PU201', 'DR217', '1'),
-('PU201', 'DR019', '2'),
-('PU921', 'DR981', '3'),
-('PU921', 'DR934', '4'),
-('PU312', 'DR012', '5'),
-('PU312', 'DR103', '1'),
-('PU888', 'DR021', '2'),
-('PU888', 'DR812', '3'),
-('PU888', 'DR923', '4'),
-('PU001', 'DR013', '5'),
-('PU001', 'DR217', '1'),
-('PU001', 'DR019', '2'), 
-('PU001', 'DR981', '3'),
-('PU845', 'DR934', '4'),
-('PU845', 'DR012', '5'),
-('PU827', 'DR103', '1'),
-('PU827', 'DR021', '2'),
-('PU827', 'DR812', '3'),
-('PU827', 'DR923', '4'), 
-('PU821', 'DR013', '5'),
-('PU821', 'DR217', '1'),
-('PU999', 'DR019', '2'),
-('PU999', 'DR981', '3'), 
-('PU838', 'DR934', '4'), 
-('PU838', 'DR012', '5'),  
-('PU011', 'DR217', '1'),
-('PU011', 'DR019', '2'),
-('PU012', 'DR981', '3'),
-('PU013', 'DR934', '4'),
-('PU013', 'DR012', '5'),
-('PU013', 'DR103', '1'),
-('PU014', 'DR021', '2'),
-('PU014', 'DR812', '3'),
-('PU014', 'DR923', '4'),
-('PU015', 'DR013', '5') 
+('PU201', 'DR217', 1),
+('PU201', 'DR019', 2),
+('PU921', 'DR981', 3),
+('PU921', 'DR934', 4),
+('PU312', 'DR012', 5),
+('PU312', 'DR103', 1),
+('PU888', 'DR021', 2),
+('PU888', 'DR812', 3),
+('PU888', 'DR923', 4),
+('PU001', 'DR013', 5),
+('PU001', 'DR217', 1),
+('PU001', 'DR019', 2), 
+('PU001', 'DR981', 3),
+('PU845', 'DR934', 4),
+('PU845', 'DR012', 5),
+('PU827', 'DR103', 1),
+('PU827', 'DR021', 2),
+('PU827', 'DR812', 3),
+('PU827', 'DR923', 4), 
+('PU821', 'DR013', 5),
+('PU821', 'DR217', 1),
+('PU999', 'DR019', 2),
+('PU999', 'DR981', 3), 
+('PU838', 'DR934', 4), 
+('PU838', 'DR012', 5),  
+('PU011', 'DR217', 1),
+('PU011', 'DR019', 2),
+('PU012', 'DR981', 3),
+('PU013', 'DR934', 4),
+('PU013', 'DR012', 5),
+('PU013', 'DR103', 1),
+('PU014', 'DR021', 2),
+('PU014', 'DR812', 3),
+('PU014', 'DR923', 4),
+('PU015', 'DR013', 5) 
 --================================================================================================================================ 
-
 
 --Jawaban Dari Soal 1 - 10 
 
@@ -526,65 +530,42 @@ TH.TransactionID = THD.TransactionID, (
 where THD.DrinkID = alias.MD AND DrinkQuantity > 1 
 --================================================================  
 
---6 (PROBLEM)
+--6 (BERHASIL)
 --================================================================  
 Select 
-MS.StaffID,
-CONVERT(varchar, TH.TransactionDate, 107) as 'Transaction Date',
-REPLACE(MMT.MovieID, 'MO', 'Movie') as 'Movie ID', 
-concat('Film ', MovieName) as 'Movie Name', 
-MovieCategory
-from MsStaff MS join 
-TransactionHeader TH on 
-MS.StaffID = TH.StaffID join 
-TransactionDetailTicket TDT on 
-TH.TransactionID = TDT.TransactionID join 
-MsMovie MMT on 
-MMT.MovieID = TDT.MovieID, ( 
-	select --Ini Masi Experimental jujur gw belom terlalu paham kalo yang diatas rata-rata kek mana ~Lance
-	CAST(SUBSTRING(MovieDuration, 1, 2) AS INT) * 3600 + 
-    CAST(SUBSTRING(MovieDuration, 4, 2) AS INT) * 60 + 
-    CAST(SUBSTRING(MovieDuration, 7, 2) AS INT) AS duration_in_seconds
-	from MsMovie 
-
-	WHERE
-    CAST(SUBSTRING(MovieDuration, 1, 2) AS INT) * 3600 + 
-    CAST(SUBSTRING(MovieDuration, 4, 2) AS INT) * 60 + 
-    CAST(SUBSTRING(MovieDuration, 7, 2) AS INT) >
-    (SELECT AVG(CAST(SUBSTRING(MovieDuration, 1, 2) AS INT) * 3600 + 
-                  CAST(SUBSTRING(MovieDuration, 4, 2) AS INT) * 60 + 
-                  CAST(SUBSTRING(MovieDuration, 7, 2) AS INT))
-     FROM MsMovie)
-) as MM   
+s.StaffID,
+CONVERT(varchar, TransactionDate, 106) as 'Transaction Date',
+REPLACE(m.MovieID, 'MU', 'Movie ') as 'Movie Identification',
+CONCAT('Film ', MovieName) as 'Movie Name',
+MovieCategory,
+MovieDuration
+FROM MsStaff s
+JOIN TransactionHeader h ON s.StaffID = h.StaffID
+JOIN TransactionDetailTicket dt ON h.TransactionID = dt.TransactionID
+JOIN MsMovie m ON dt.MovieID = m.movieID, (
+SELECT AVG(MovieDuration) as 'avg' FROM MsMovie) as alias
+WHERE m.MovieID LIKE('MO003') AND MovieDuration > alias.avg
 --================================================================  
  
+-- 7 (PROBLEM)
+--================================================================  
+ SELECT
+
+--================================================================  
 
 
---EXPERIMENTAL CODES 
---10 (PROBLEM)
---=======================================================
-Create View [Food Sales] as
-select 
-FoodName, 
-SUM(FoodQuantity) as 'Total Quantity Sold' 
-AVG(FoodPrice) as 'Average Food Price' 
-from MsFood MF join 
-TransactionDetailFood TDF on 
-MF.FoodID = TDF.FoodID join 
-TransactionHeader TH on 
-TDF.TransactionID = TH.TransactionID
-where FoodCategory in ('Sandwich') and 
-Year(TransactionDate) = Year(Getdate()) 
-Group by FoodName;
+-- 8 (PROBLEM)
+--================================================================  
+ SELECT
 
-select * from [Food Sales]
---======================================================= 
 
---9 (PROBLEM)
+--================================================================  
+
+--9 (BERHASIL)
 --======================================================= 
 Create View [TotalPurchase] as 
 select 
-Stuff(Varchar, Charindex(' ', StaffName) - 1, len(StaffName), 'Staff') as 'Staff', 
+STUFF(Ms.StaffName, charindex(' ', Ms.StaffName) - 1, len(Ms.StaffName), 'Staff') As 'Staff', 
 MovieName, 
 MovieRating, 
 AVG(TicketQuantity) as 'Average Ticket Bought', 
@@ -596,9 +577,24 @@ TransactionDetailTicket TDT on
 TH.TransactionID = TDT.TransactionID join 
 MsMovie MM on 
 MM.MovieID = TDT.MovieID 
-where MovieRating = '5'
-GroupBy MovieName, MovieRating 
+where MovieRating = 5
+Group By MovieName, MovieRating, StaffName
 having SUM(TicketQuantity) > AVG(TicketQuantity);
+--======================================================= 
 
-Select * from [TotalPurchase]
+--10 (BERHASIL)
+--=======================================================
+Create View [Food Sales] as
+select 
+FoodName, 
+SUM(FoodQuantity) as 'Total Quantity Sold', 
+AVG(FoodPrice) as 'Average Food Price' 
+from MsFood MF join 
+TransactionDetailFood TDF on 
+MF.FoodID = TDF.FoodID join 
+TransactionHeader TH on 
+TDF.TransactionID = TH.TransactionID
+where FoodCategory in ('Sandwich') AND
+Year(TransactionDate) = Year(GETDATE())
+Group by FoodName;
 --======================================================= 
