@@ -326,7 +326,7 @@ group by FoodPrice, DrinkPrice, TransactionDate
 --4 (Berhasil)
 --================================================================ 
 Select 
-left(StaffName, Charindex(' ', StaffName)) as 'Staffs First Name', 
+LOWER(LEFT(StaffName, Charindex(' ', StaffName))) as 'Staffs First Name', 
 FoodCategory, 
 AVG(PD.FoodQuantityPurchase) as 'Average Total Food Purchased', 
 SUM(PD.FoodQuantityPurchase) as 'Total Food Purchased' 
