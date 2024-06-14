@@ -3,9 +3,18 @@ GO
 USE CineMoFie
 GO 
 
-
+--DROP STAGING AREA
+DROP DATABASE CineMoFiel 
+DROP TABLE MsStaff 
+DROP TABLE MsCustomer
+DROP TABLE MsFood 
+DROP TABLE MsDrink 
+DROP TABLE MsMovie 
+DROP TABLE MsSupplier 
+DROP TABLE TransactionHeader 
 DROP TABLE TransactionDetail
-
+DROP TABLE MsPurchase
+DROP TABLE PurchaseDetail
 
 CREATE TABLE MsStaff (
 StaffID CHAR(5) PRIMARY KEY CHECK(StaffID LIKE('ST[0-9][0-9][0-9]')) NOT NULL,
@@ -160,8 +169,7 @@ INSERT INTO MsSupplier VALUES
 ('SU931', 'PT. Yogyakarta', 'Jl. Jogja 12'),
 ('SU825', 'PT. 51', 'Jl. Sudirman 21')
 
-INSERT INTO TransactionHeader(TransactionID, StaffID, CustomerID, TransactionDate)  
-VALUES
+INSERT INTO TransactionHeader VALUES
 ('TR001', 'ST108', 'CU901', '2019-01-05'),
 ('TR002', 'ST108', 'CU222', '2019-08-08'),
 ('TR003', 'ST012', 'CU222', '2019-12-25'),
@@ -190,8 +198,7 @@ VALUES
 ('TR026', 'ST028', 'CU008', '2024-02-13'),
 ('TR027', 'ST028', 'CU911', '2024-05-02')
 
-INSERT INTO TransactionDetail  
-VALUES 
+INSERT INTO TransactionDetail VALUES 
 ('TR001', 'MO001', 1, 'FO012', 1, 'DR217', 1),
 ('TR002', 'MO002', 2, 'FO213', 2, 'DR019', 2),
 ('TR003', 'MO003', 3, 'FO234', 3, 'DR981', 1),
