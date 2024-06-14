@@ -1,3 +1,4 @@
+-- CREATE DATABASE AREA
 CREATE DATABASE CineMoFie
 GO
 USE CineMoFie
@@ -16,6 +17,7 @@ DROP TABLE TransactionDetail
 DROP TABLE MsPurchase
 DROP TABLE PurchaseDetail
 
+-- CREATE TABLE AREA
 CREATE TABLE MsStaff (
 StaffID CHAR(5) PRIMARY KEY CHECK(StaffID LIKE('ST[0-9][0-9][0-9]')) NOT NULL,
 StaffName VARCHAR(50) NOT NULL,
@@ -97,6 +99,7 @@ DrinkID CHAR(5) FOREIGN KEY REFERENCES MsDrink(DrinkID) ON UPDATE CASCADE ON DEL
 DrinkQuantityPurchase INTEGER NOT NULL
 ) 
 
+-- INSERT VALUE AREA
 INSERT INTO MsStaff VALUES 
 ('ST108', 'Lance Arifin', '2005-08-10', 'Jl. Sunter 5', 'Male'),
 ('ST012', 'Vincent Febryan', '2005-02-06', 'Jl. Mangga Besar 1', 'Male'),
